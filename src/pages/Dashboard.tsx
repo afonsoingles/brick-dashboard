@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Box, Container } from '@mui/material'
+import { Box } from '@mui/material'
 import { useAuth } from '../utils/auth/authContext'
 import { authApi } from '../utils/api/authApi'
 import DashboardNav from '../components/DashboardNav'

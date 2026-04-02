@@ -943,7 +943,7 @@ export default function PrinterJobs({ userData }: PrinterJobsProps) {
                       </IconButton>
                       <IconButton
                         size="small"
-                        onClick={() => handleDownloadClick(job.id, job.filename)}
+                        onClick={() => handleDownloadClick(job.id)}
                         disabled={downloadingJobId === job.id}
                         sx={{
                           width: '28px',

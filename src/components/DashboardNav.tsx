@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Button, Menu, MenuItem, Typography, Divider, IconButton } from '@mui/material'
+import { Box, Button, Menu, MenuItem, Typography, IconButton } from '@mui/material'
 import { LogOut, ChevronDown, Users } from 'lucide-react'
 import Icon from '@hackclub/icons'
 import { useNavigate, useLocation } from 'react-router-dom'

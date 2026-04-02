@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Box, Container, Typography, Paper, Button, CircularProgress } from '@mui/material'
-import { ArrowRight, Mail, Zap, Settings, Shield, Users, CreditCard } from 'lucide-react'
+import { ArrowRight, Mail, Zap, Settings, Shield, Users } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { UserData } from '../utils/api/authApi'
 
