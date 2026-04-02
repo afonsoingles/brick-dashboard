@@ -9,24 +9,30 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.3",
-    "axios": "^1.10.0",
-    "js-cookie": "^3.0.5",
-    "@mui/material": "^7.2.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@hackclub/icons": "^0.1.0",
     "@mui/icons-material": "^7.2.0",
-    "lucide-react": "^0.428.0"
+    "@mui/material": "^7.2.0",
+    "axios": "^1.10.0",
+    "js-cookie": "^3.0.5",
+    "lucide-react": "^0.428.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
+    "@heroicons/react": "^2.2.0",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20.10.6",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
-    "@types/node": "^20.10.6",
-    "@types/js-cookie": "^3.0.6",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.3.3",
     "vite": "^5.0.8"
   }
 }

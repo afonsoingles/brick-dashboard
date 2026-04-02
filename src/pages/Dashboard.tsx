@@ -1,19 +1,18 @@
-import { useEffect, useState, useRef } from 'react'
-import { Box } from '@mui/material'
-import { useAuth } from '../utils/auth/authContext'
+import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { authApi, UserData } from '../utils/api/authApi'
+import { Box, Container } from '@mui/material'
+import { useAuth } from '../utils/auth/authContext'
+import { authApi } from '../utils/api/authApi'
 import DashboardNav from '../components/DashboardNav'
 import DashboardHome from './DashboardHome'
 import PrinterJobs from './PrinterJobs'
-import AdminUsers from './AdminUsers'
 import AdminJobs from './AdminJobs'
+import AdminUsers from './AdminUsers'
 import AdminCredits from './AdminCredits'
+import UserSettings from './UserSettings'
 
 export default function Dashboard() {
-  const [userData, setUserData] = useState<UserData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const { token } = useAuth()
+  const { token, user, setUser } = useAuth()
   const fetchedRef = useRef(false)
 
   useEffect(() => {
@@ -24,41 +23,33 @@ export default function Dashboard() {
     if (!token || fetchedRef.current) return
     fetchedRef.current = true
 
-    const fetchUserData = async () => {
+    const fetchUser = async () => {
       try {
-        const data = await authApi.getMe(token)
-        setUserData(data)
+        const userData = await authApi.getMe(token)
+        setUser(userData)
       } catch (err: any) {
-        console.error('Failed to fetch user data:', err)
-        // API interceptor handles 401/403/500 errors
-        // If we get here, it's a different error
-        if (!err.response) {
-          // Connection failure
-          localStorage.setItem('serverError', 'true')
-          window.location.href = '/error'
-        }
-      } finally {
-        setLoading(false)
+        console.error('Failed to fetch user:', err.response?.data || err.message)
       }
     }
 
-    fetchUserData()
-  }, [token])
+    fetchUser()
+  }, [token, setUser])
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#0f172a' }}>
-      <DashboardNav userData={userData} />
-      
-      <Routes>
-        <Route path="/" element={<DashboardHome userData={userData} loading={loading} />} />
-        <Route path="/printer/jobs" element={<PrinterJobs userData={userData} />} />
-        <Route path="/printer/jobs/:jobId" element={<PrinterJobs userData={userData} />} />
-        <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/jobs" element={<AdminJobs />} />
-        <Route path="/admin/credits" element={<AdminCredits />} />
-        <Route path="/admin/printers" element={<Box sx={{ padding: '32px' }} />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#0f172a', display: 'flex', flexDirection: 'column' }}>
+      <DashboardNav userData={user} />
+      <Box sx={{ paddingTop: '8px', flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<DashboardHome userData={user} />} />
+          <Route path="/printer/jobs/:jobId" element={<PrinterJobs userData={user} />} />
+          <Route path="/printer/jobs" element={<PrinterJobs userData={user} />} />
+          <Route path="/admin/jobs" element={<AdminJobs />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/admin/credits" element={<AdminCredits />} />
+          <Route path="/settings" element={<UserSettings userData={user} />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Box>
     </Box>
   )
 }

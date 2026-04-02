@@ -6,7 +6,7 @@ import { ToastProvider } from './components/Toast'
 import LoginPage from './pages/LoginPage'
 import Dashboard from './pages/Dashboard'
 import UserViewPage from './pages/UserViewPage'
-import ErrorPage from './pages/ErrorPage'
+import { ErrorBoundary, ErrorOverlayProvider } from './components/ErrorBoundary'
 import { CircularProgress, Box } from '@mui/material'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -25,17 +25,20 @@ function App() {
   return (
     <ThemeProvider>
       <ToastProvider>
-        <AuthProvider>
-          <Router>
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/error" element={<ErrorPage />} />
-              <Route path="/dashboard/*" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-              <Route path="/users/:id" element={<PrivateRoute><UserViewPage /></PrivateRoute>} />
-              <Route path="*" element={<Navigate to="/dashboard" />} />
-            </Routes>
-          </Router>
-        </AuthProvider>
+        <ErrorBoundary>
+          <ErrorOverlayProvider>
+            <AuthProvider>
+              <Router>
+                <Routes>
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/dashboard/*" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                  <Route path="/users/:id" element={<PrivateRoute><UserViewPage /></PrivateRoute>} />
+                  <Route path="*" element={<Navigate to="/dashboard" />} />
+                </Routes>
+              </Router>
+            </AuthProvider>
+          </ErrorOverlayProvider>
+        </ErrorBoundary>
       </ToastProvider>
     </ThemeProvider>
   )

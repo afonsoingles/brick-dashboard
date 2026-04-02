@@ -52,6 +52,8 @@ export default function AdminJobs() {
     }
   }
 
+
+
   const handleApproveClick = async (jobId: string) => {
     if (!token) return
     try {
@@ -127,45 +129,45 @@ export default function AdminJobs() {
             <TableBody>
               {jobs.map((job) => (
                 <TableRow key={job.id} sx={{ '&:hover': { backgroundColor: '#263449' } }}>
-                   <TableCell sx={{ color: '#f1f5f9' }}>{job.file_name || 'Unknown'}</TableCell>
-                   <TableCell sx={{ color: '#f1f5f9', textAlign: 'center' }}>{job.copies || 1}</TableCell>
-                   <TableCell sx={{ color: '#f1f5f9', textAlign: 'center' }}>{job.cost || 0}</TableCell>
-                   <TableCell sx={{ color: '#f1f5f9', textAlign: 'center', fontSize: '12px' }}>
-                     {new Date(job.created_at * 1000).toLocaleString()}
-                   </TableCell>
-                   <TableCell sx={{ textAlign: 'center' }}>
-                     <Box sx={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                       <Button
-                         size="small"
-                         variant="contained"
-                         startIcon={<Check size={16} />}
-                         disabled={operationLoading}
-                         onClick={() => handleApproveClick(job.id)}
-                         sx={{
-                           backgroundColor: '#10b981',
-                           '&:hover': { backgroundColor: '#059669' },
-                           '&:disabled': { backgroundColor: '#475569' },
-                         }}
-                       >
-                         Approve
-                       </Button>
-                       <Button
-                         size="small"
-                         variant="contained"
-                         startIcon={<X size={16} />}
-                         disabled={operationLoading}
-                         onClick={() => handleRejectClick(job.id)}
-                         sx={{
-                           backgroundColor: '#ef4444',
-                           '&:hover': { backgroundColor: '#dc2626' },
-                           '&:disabled': { backgroundColor: '#475569' },
-                         }}
-                       >
-                         Reject
-                       </Button>
-                     </Box>
-                   </TableCell>
-                 </TableRow>
+                    <TableCell sx={{ color: '#f1f5f9' }}>{job.file_name || 'Unknown'}</TableCell>
+                    <TableCell sx={{ color: '#f1f5f9', textAlign: 'center' }}>{job.copies || 1}</TableCell>
+                    <TableCell sx={{ color: '#f1f5f9', textAlign: 'center' }}>{job.cost || 0}</TableCell>
+                    <TableCell sx={{ color: '#f1f5f9', textAlign: 'center', fontSize: '12px' }}>
+                      {new Date(job.created_at * 1000).toLocaleString()}
+                    </TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <Box sx={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          startIcon={<Check size={16} />}
+                          disabled={operationLoading}
+                          onClick={() => handleApproveClick(job.id)}
+                          sx={{
+                            backgroundColor: '#10b981',
+                            '&:hover': { backgroundColor: '#059669' },
+                            '&:disabled': { backgroundColor: '#475569' },
+                          }}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          startIcon={<X size={16} />}
+                          disabled={operationLoading}
+                          onClick={() => handleRejectClick(job.id)}
+                        sx={{
+                          backgroundColor: '#ef4444',
+                          '&:hover': { backgroundColor: '#dc2626' },
+                          '&:disabled': { backgroundColor: '#475569' },
+                        }}
+                      >
+                        Reject
+                      </Button>
+                    </Box>
+                  </TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { triggerGlobalError } from '../../components/ErrorBoundary'
 
 const API_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:8000/api'
 
@@ -21,9 +22,7 @@ apiClient.interceptors.response.use(
     
     // Handle any 5xx server errors or connection failures
     if (error.response?.status >= 500 || !error.response) {
-      // Store error state and redirect to error page
-      localStorage.setItem('serverError', 'true')
-      window.location.href = '/error'
+      triggerGlobalError()
       return Promise.reject(error)
     }
     
@@ -144,9 +143,31 @@ export const authApi = {
   },
 }
 
+export interface PrintJobLog {
+  id: string
+  timestamp: string
+  actor: string
+  type: string
+  description: string
+}
+
+export interface PrintJob {
+  id: string
+  user_id: string
+  filename: string
+  status: 'pending' | 'approved' | 'rejected' | 'printed'
+  copies: number
+  color: boolean
+  logs?: PrintJobLog[]
+  created_at: string
+  updated_at: string
+  cups_job_id?: string
+  file?: string
+}
+
 export const printerApi = {
-  getUserJobs: async (token: string, page: number = 1): Promise<any> => {
-    const response = await apiClient.get('/v1/printer/jobs', {
+  getUserJobs: async (token: string, page: number = 1): Promise<PrintJob[]> => {
+    const response = await apiClient.get('/v2/printer/jobs', {
       params: { page },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -160,47 +181,40 @@ export const printerApi = {
     return response.data.data
   },
 
-  getJob: async (token: string, jobId: string): Promise<any> => {
-    const response = await apiClient.get(`/v1/printer/jobs/${jobId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-
-    return response.data
-  },
-
-  approveJob: async (token: string, jobId: string): Promise<any> => {
-    const response = await apiClient.post(`/v1/printer/jobs/${jobId}/approve`, {}, {
+  getJob: async (token: string, jobId: string): Promise<PrintJob> => {
+    const response = await apiClient.get(`/v2/printer/jobs/${jobId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
 
     if (!response.data.success) {
-      throw new Error(response.data.error || 'Failed to approve job')
+      throw new Error(response.data.message || 'Job not found')
     }
 
-    return response.data
+    return response.data.data
   },
 
-  rejectJob: async (token: string, jobId: string, reason: string): Promise<any> => {
-    const response = await apiClient.post(`/v1/printer/jobs/${jobId}/reject`, { reason }, {
+  adminDecision: async (token: string, jobId: string, decision: 'approve' | 'reject' | 'set_pending', reason: string): Promise<any> => {
+    const response = await apiClient.post(`/v2/printer/jobs/${jobId}/admin/decision`, {
+      decision,
+      reason,
+    }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
 
     if (!response.data.success) {
-      throw new Error(response.data.error || 'Failed to reject job')
+      throw new Error(response.data.message || 'Failed to update job')
     }
 
     return response.data
   },
 
-  getPendingJobs: async (token: string, page: number = 1): Promise<any> => {
-    const response = await apiClient.get('/v1/printer/jobs/pending', {
-      params: { page },
+  getPendingJobs: async (token: string, page: number = 1): Promise<PrintJob[]> => {
+    const response = await apiClient.get('/v2/printer/jobs', {
+      params: { page, admin_reviewer_mode: true },
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -211,5 +225,20 @@ export const printerApi = {
     }
 
     return response.data.data
+  },
+
+  getJobPreview: async (token: string, jobId: string, download: boolean = false): Promise<{ url: string }> => {
+    const response = await apiClient.get(`/v2/printer/jobs/${jobId}/preview`, {
+      params: { download },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Failed to generate preview')
+    }
+
+    return { url: response.data.url }
   },
 }

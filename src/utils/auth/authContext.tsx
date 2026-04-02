@@ -1,13 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
+import { UserData } from '../api/authApi'
 
 interface AuthContextType {
   isAuthenticated: boolean
   email: string | null
   token: string | null
+  user: UserData | null
   loading: boolean
   login: (token: string, email: string) => void
   logout: () => void
+  setUser: (user: UserData | null) => void
 }
 
 export type { AuthContextType }
@@ -19,6 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [token, setToken] = useState<string | null>(null)
   const [email, setEmail] = useState<string | null>(null)
+  const [user, setUser] = useState<UserData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -43,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = () => {
     setToken(null)
     setEmail(null)
+    setUser(null)
     Cookies.remove('auth_token')
     Cookies.remove('user_email')
   }
@@ -51,9 +56,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     isAuthenticated: !!token,
     email,
     token,
+    user,
     loading,
     login,
     logout,
+    setUser,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
