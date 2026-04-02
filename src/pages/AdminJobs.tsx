@@ -56,7 +56,7 @@ export default function AdminJobs() {
     if (!token) return
     try {
       setOperationLoading(true)
-      await printerApi.approveJob(token, jobId)
+      await printerApi.adminDecision(token, jobId, 'approve', '')
       setJobs(jobs.filter(j => j.id !== jobId))
     } catch (err: any) {
       console.error('Failed to approve job:', err)
@@ -75,7 +75,7 @@ export default function AdminJobs() {
     if (!token || !selectedJobId || !rejectionReason.trim()) return
     try {
       setOperationLoading(true)
-      await printerApi.rejectJob(token, selectedJobId, rejectionReason)
+      await printerApi.adminDecision(token, selectedJobId, 'reject', rejectionReason)
       setJobs(jobs.filter(j => j.id !== selectedJobId))
       setOpenRejectDialog(false)
       setRejectionReason('')

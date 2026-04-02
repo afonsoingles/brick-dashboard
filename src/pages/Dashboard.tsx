@@ -41,12 +41,12 @@ export default function Dashboard() {
       <Box sx={{ paddingTop: '8px', flex: 1 }}>
         <Routes>
           <Route path="/" element={<DashboardHome userData={user} />} />
-          <Route path="/printer/jobs/:jobId" element={<PrinterJobs userData={user} />} />
-          <Route path="/printer/jobs" element={<PrinterJobs userData={user} />} />
-          <Route path="/admin/jobs" element={<AdminJobs />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/credits" element={<AdminCredits />} />
-          <Route path="/settings" element={<UserSettings userData={user} />} />
+           <Route path="/printer/jobs/:jobId" element={<PrinterJobs userData={user} />} />
+           <Route path="/printer/jobs" element={<PrinterJobs userData={user} />} />
+           <Route path="/admin/jobs" element={<AdminJobs />} />
+           <Route path="/admin/users" element={<AdminUsers />} />
+           <Route path="/admin/credits" element={<AdminCredits />} />
+           <Route path="/settings" element={<UserSettings />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Box>
