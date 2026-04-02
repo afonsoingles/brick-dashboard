@@ -163,7 +163,7 @@ export default function PrinterJobs({ userData }: PrinterJobsProps) {
     }
   }
 
-  const handleDownloadClick = async (id: string, filename: string) => {
+  const handleDownloadClick = async (id: string) => {
     if (!token) return
     try {
       setDownloadingJobId(id)
